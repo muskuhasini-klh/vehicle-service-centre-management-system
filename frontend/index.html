@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Service Centre Management System | Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.7 2 10.8 2 11v5c0 .6.4 1 1 1h2"/>
+          <circle cx="7" cy="17" r="2"/>
+          <path d="M9 17h6"/>
+          <circle cx="17" cy="17" r="2"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">Autocare Pro</h1>
+        <span class="brand-subtitle">Vehicle Service Centre Management System</span>
+      </div>
+    </div>
+
+    <div class="nav-status">
+      <span class="db-badge" id="db-badge">
+        <span class="pulse-dot"></span>
+        <span id="active-db-text">Database: Connecting...</span>
+      </span>
+      <div class="user-profile" id="user-profile">
+        <div class="avatar" id="user-avatar">A</div>
+        <div class="user-info">
+          <span class="user-name" id="user-display-name">Admin Portal</span>
+          <span class="user-role" id="user-display-role">Staff / Supervisor</span>
+        </div>
+        <button class="btn-logout" id="btn-logout" title="Sign out" onclick="handleLogout()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <nav class="sidebar-menu">
+        <button class="nav-item active" data-tab="tab-dashboard" onclick="switchTab('tab-dashboard')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </button>
+        <button class="nav-item" data-tab="tab-appointments" onclick="switchTab('tab-appointments')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Appointments
+        </button>
+        <button class="nav-item" data-tab="tab-services" onclick="switchTab('tab-services')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+          Service Tracking
+        </button>
+        <button class="nav-item" data-tab="tab-customers" onclick="switchTab('tab-customers')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Customers & Cars
+        </button>
+        <button class="nav-item" data-tab="tab-inventory" onclick="switchTab('tab-inventory')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          Spare Parts
+        </button>
+        <button class="nav-item" data-tab="tab-billing" onclick="switchTab('tab-billing')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          Billing & Invoices
+        </button>
+        <button class="nav-item" data-tab="tab-mechanics" onclick="switchTab('tab-mechanics')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Mechanics
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="pbl-meta">
+          <strong>Review 4 Ready</strong>
+          <small>Database Engineering PBL</small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- ================= TAB: DASHBOARD ================= -->
+      <section id="tab-dashboard" class="tab-pane active">
+        <div class="section-header">
+          <div>
+            <h2>Operations Overview</h2>
+            <p class="section-desc">Real-time status of service center appointments, repairs, and inventory.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-appointment')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Book Service
+            </button>
+            <button class="btn btn-secondary" onclick="loadDashboard()">Refresh</button>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon bg-emerald">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-label">Registered Customers</span>
+              <h3 class="metric-value" id="stat-customers">0</h3>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon bg-teal">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-label">Total Appointments</span>
+              <h3 class="metric-value" id="stat-appointments">0</h3>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon bg-amber">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-label">Active Repairs</span>
+              <h3 class="metric-value" id="stat-repairs">0</h3>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon bg-blue">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-label">Total Revenue</span>
+              <h3 class="metric-value" id="stat-revenue">₹0</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Two-Column Detail -->
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Recent Service Appointments</h3>
+              <a href="javascript:void(0)" onclick="switchTab('tab-appointments')" class="panel-link">View all &rarr;</a>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Vehicle</th>
+                    <th>Service Type</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-appointments-body">
+                  <tr><td colspan="5" class="text-center">Loading appointments...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Inventory & Low Stock Alerts</h3>
+              <a href="javascript:void(0)" onclick="switchTab('tab-inventory')" class="panel-link">Manage inventory &rarr;</a>
+            </div>
+            <div id="dash-inventory-list" class="inventory-alerts">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB: APPOINTMENTS ================= -->
+      <section id="tab-appointments" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Service Appointments</h2>
+            <p class="section-desc">Manage customer bookings, assign mechanics, and update statuses.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('modal-appointment')">
+            + New Appointment
+          </button>
+        </div>
+
+        <div class="filter-bar">
+          <input type="text" id="filter-appt-search" class="input-search" placeholder="Search customer, vehicle, or service..." onkeyup="filterAppointmentsTable()">
+          <select id="filter-appt-status" class="select-filter" onchange="filterAppointmentsTable()">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="In-Progress">In-Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table" id="table-appointments">
+            <thead>
+              <tr>
+                <th>Appt #</th>
+                <th>Customer</th>
+                <th>Vehicle Reg</th>
+                <th>Date & Time</th>
+                <th>Service Type</th>
+                <th>Assigned Mechanic</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="appointments-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB: SERVICES ================= -->
+      <section id="tab-services" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Service Tracking & Job Cards</h2>
+            <p class="section-desc">Live inspection notes, mechanic assignments, and repair job progress.</p>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Job #</th>
+                <th>Appt Ref</th>
+                <th>Status</th>
+                <th>Inspection Notes</th>
+                <th>Repair Actions</th>
+                <th>Timeline</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="services-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB: CUSTOMERS & CARS ================= -->
+      <section id="tab-customers" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Customers & Vehicles Directory</h2>
+            <p class="section-desc">Maintain centralized customer contact info and registered vehicle history.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" onclick="openModal('modal-customer')">+ Add Customer</button>
+            <button class="btn btn-secondary" onclick="openModal('modal-vehicle')">+ Add Vehicle</button>
+          </div>
+        </div>
+
+        <div class="tabs-sub">
+          <button class="subtab-btn active" onclick="switchSubtab('subtab-customers')">Customers (<span id="count-customers">0</span>)</button>
+          <button class="subtab-btn" onclick="switchSubtab('subtab-vehicles')">Vehicles (<span id="count-vehicles">0</span>)</button>
+        </div>
+
+        <div id="subtab-customers" class="subtab-pane active">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Address</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customers-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="subtab-vehicles" class="subtab-pane">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Vehicle ID</th>
+                  <th>Reg Number</th>
+                  <th>Make & Model</th>
+                  <th>Year</th>
+                  <th>Type</th>
+                  <th>Customer ID</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="vehicles-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= TAB: INVENTORY ================= -->
+      <section id="tab-inventory" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Spare Parts Inventory</h2>
+            <p class="section-desc">Track components, stock levels, unit pricing, and reorder thresholds.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('modal-spare-part')">+ Add Spare Part</button>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Part ID</th>
+                <th>Part Name</th>
+                <th>Category</th>
+                <th>In Stock</th>
+                <th>Unit Price</th>
+                <th>Stock Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB: BILLING & INVOICES ================= -->
+      <section id="tab-billing" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Billing & Invoicing</h2>
+            <p class="section-desc">Generate customer invoices, view labor/parts breakdown, and record payments.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('modal-bill')">+ Create Invoice</button>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bill #</th>
+                <th>Service Job</th>
+                <th>Customer ID</th>
+                <th>Date</th>
+                <th>Parts Cost</th>
+                <th>Labour</th>
+                <th>Tax</th>
+                <th>Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bills-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB: MECHANICS ================= -->
+      <section id="tab-mechanics" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Workshop Mechanics</h2>
+            <p class="section-desc">Specialized technicians, current availability, and contact roster.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('modal-mechanic')">+ Add Mechanic</button>
+        </div>
+
+        <div class="mechanics-grid" id="mechanics-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal: Book Appointment -->
+  <div class="modal-backdrop" id="modal-appointment">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Book Service Appointment</h3>
+        <button class="modal-close" onclick="closeModal('modal-appointment')">&times;</button>
+      </div>
+      <form id="form-appointment" onsubmit="handleAppointmentSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer *</label>
+            <select id="appt-customer-select" required></select>
+          </div>
+          <div class="form-group">
+            <label>Vehicle *</label>
+            <select id="appt-vehicle-select" required></select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date *</label>
+            <input type="date" id="appt-date" required>
+          </div>
+          <div class="form-group">
+            <label>Time *</label>
+            <input type="time" id="appt-time" value="10:00" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Service Package / Issue *</label>
+          <select id="appt-service-type" required>
+            <option value="Periodic Maintenance & Oil Change">Periodic Maintenance & Oil Change</option>
+            <option value="Brake Inspection & Replacement">Brake Inspection & Replacement</option>
+            <option value="Engine Diagnostics & Tuning">Engine Diagnostics & Tuning</option>
+            <option value="Air Conditioning & Electrical Check">Air Conditioning & Electrical Check</option>
+            <option value="Wheel Alignment & Suspension">Wheel Alignment & Suspension</option>
+            <option value="Full Detailing & Washing">Full Detailing & Washing</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Assign Mechanic (Optional)</label>
+          <select id="appt-mechanic-select"></select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-appointment')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Book Appointment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Customer -->
+  <div class="modal-backdrop" id="modal-customer">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Register New Customer</h3>
+        <button class="modal-close" onclick="closeModal('modal-customer')">&times;</button>
+      </div>
+      <form id="form-customer" onsubmit="handleCustomerSubmit(event)">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="cust-name" required placeholder="e.g. Rahul Verma">
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="cust-email" required placeholder="e.g. rahul@example.com">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="cust-phone" placeholder="e.g. 9876543210">
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <textarea id="cust-address" rows="2" placeholder="Residential / Business Address"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-customer')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Vehicle -->
+  <div class="modal-backdrop" id="modal-vehicle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Register Customer Vehicle</h3>
+        <button class="modal-close" onclick="closeModal('modal-vehicle')">&times;</button>
+      </div>
+      <form id="form-vehicle" onsubmit="handleVehicleSubmit(event)">
+        <div class="form-group">
+          <label>Owner (Customer) *</label>
+          <select id="veh-customer-select" required></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Registration No. *</label>
+            <input type="text" id="veh-reg" required placeholder="e.g. TS09AZ9999">
+          </div>
+          <div class="form-group">
+            <label>Make *</label>
+            <input type="text" id="veh-make" required placeholder="e.g. Honda">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Model *</label>
+            <input type="text" id="veh-model" required placeholder="e.g. City">
+          </div>
+          <div class="form-group">
+            <label>Year</label>
+            <input type="number" id="veh-year" value="2022">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Vehicle Type</label>
+          <select id="veh-type">
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Hatchback">Hatchback</option>
+            <option value="MUV">MUV</option>
+            <option value="Motorcycle">Motorcycle</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-vehicle')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Vehicle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Spare Part -->
+  <div class="modal-backdrop" id="modal-spare-part">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Add Spare Part to Inventory</h3>
+        <button class="modal-close" onclick="closeModal('modal-spare-part')">&times;</button>
+      </div>
+      <form id="form-spare-part" onsubmit="handleSparePartSubmit(event)">
+        <div class="form-group">
+          <label>Part Name *</label>
+          <input type="text" id="part-name" required placeholder="e.g. Bosch Front Brake Pads">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" id="part-category" placeholder="e.g. Braking, Fluids, Filters">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Initial Quantity *</label>
+            <input type="number" id="part-qty" required value="10" min="0">
+          </div>
+          <div class="form-group">
+            <label>Unit Price (₹) *</label>
+            <input type="number" id="part-price" required step="0.01" value="500">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Reorder Alert Level</label>
+          <input type="number" id="part-reorder" value="5">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-spare-part')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add to Inventory</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Mechanic -->
+  <div class="modal-backdrop" id="modal-mechanic">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Add Technician / Mechanic</h3>
+        <button class="modal-close" onclick="closeModal('modal-mechanic')">&times;</button>
+      </div>
+      <form id="form-mechanic" onsubmit="handleMechanicSubmit(event)">
+        <div class="form-group">
+          <label>Mechanic Name *</label>
+          <input type="text" id="mech-name" required placeholder="e.g. Karthik Rao">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="mech-phone" placeholder="e.g. 9123456789">
+        </div>
+        <div class="form-group">
+          <label>Specialization</label>
+          <input type="text" id="mech-spec" placeholder="e.g. Engine Overhaul, Transmission, Electrical">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-mechanic')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Mechanic</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Create Invoice / Bill -->
+  <div class="modal-backdrop" id="modal-bill">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Create Service Invoice</h3>
+        <button class="modal-close" onclick="closeModal('modal-bill')">&times;</button>
+      </div>
+      <form id="form-bill" onsubmit="handleBillSubmit(event)">
+        <div class="form-group">
+          <label>Select Service Job *</label>
+          <select id="bill-service-select" required onchange="onServiceJobSelectedForBill()"></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Parts Charge (₹) *</label>
+            <input type="number" id="bill-parts" value="0" step="0.01" oninput="calculateBillTotal()">
+          </div>
+          <div class="form-group">
+            <label>Labour Charge (₹) *</label>
+            <input type="number" id="bill-labour" value="500" step="0.01" oninput="calculateBillTotal()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>GST / Tax (₹) (12%)</label>
+            <input type="number" id="bill-tax" value="60" step="0.01" readonly>
+          </div>
+          <div class="form-group">
+            <label>Total Amount (₹)</label>
+            <input type="number" id="bill-total" value="560" step="0.01" readonly class="text-bold">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-bill')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Generate Invoice</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: View Detailed Invoice (Print / PDF View) -->
+  <div class="modal-backdrop" id="modal-invoice-viewer">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3>Tax Invoice Receipt</h3>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="window.print()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print Invoice
+          </button>
+          <button class="modal-close" onclick="closeModal('modal-invoice-viewer')">&times;</button>
+        </div>
+      </div>
+      <div class="invoice-printable" id="invoice-render-content">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Local configuration and credentials
+.env
+**/.env
+
+# Python environment/cache
+**/venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local databases and generated files
+*.db
+*.sqlite
+*.sqlite3
