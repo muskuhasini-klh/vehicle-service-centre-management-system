@@ -1,0 +1,4 @@
+[build]
+  # The dashboard (index.html, styles.css, app.js) lives in frontend/.
+  # Without this, Netlify publishes the repo root, which has no index.html -> 404.
+  publish = "frontend"
