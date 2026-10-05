@@ -1,0 +1,4 @@
+[build]
+  # The dashboard is a static single-page app in the frontend/ folder
+  publish = "frontend"
+  command = ""
